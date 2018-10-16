@@ -65,6 +65,12 @@ spec:
           volumeMounts:
             - mountPath: /config
               name: config
+            {{- if .Values.useCustomNameserver }}
+            - mountPath: /etc/resolv.conf
+              name: custom-nameserver
+              subPath: resolv.conf
+              readOnly: true
+            {{- end }}
         - name: configmap-reload
           image: "{{ .Values.configmapReload.image.repository }}:{{ .Values.configmapReload.image.tag }}"
           imagePullPolicy: "{{ .Values.configmapReload.image.pullPolicy }}"
@@ -81,4 +87,8 @@ spec:
         - name: config
           configMap:
             name: {{ template "prometheus-blackbox-exporter.fullname" . }}
-
+        {{- if .Values.useCustomNameserver }}
+        - name: custom-nameserver
+          configMap:
+            name: custom-nameserver
+        {{- end }}

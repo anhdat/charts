@@ -1,0 +1,9 @@
+{{- if .Values.useCustomNameserver }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: custom-nameserver
+data:
+  resolv.conf: |
+    nameserver 8.8.8.8
+{{- end }}
